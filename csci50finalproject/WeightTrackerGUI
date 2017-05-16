@@ -1,0 +1,54 @@
+#!/bin/bash
+ 
+# clear the screen
+tput clear
+ 
+# Move cursor to screen location X,Y (top left is 0,0)
+tput cup 3 15
+ 
+# Set a foreground colour using ANSI escape
+tput setaf 44
+echo "BumbleBee Daily Weight Tracker!"
+tput sgr0
+ 
+tput cup 5 17
+# Set reverse video mode
+tput rev
+echo "Please Select From the Following Options"
+tput sgr0
+ 
+tput cup 7 15
+echo "1. Nutrition Diary"
+ 
+tput cup 8 15
+echo "2. Calorie Intake"
+ 
+tput cup 9 15
+echo "3. Weight Log"
+ 
+tput cup 10 15
+echo "4. Exit Program"
+ 
+# Set bold mode 
+tput bold
+tput cup 12 15
+read -p "Enter your choice [1-4] " choice
+
+#not taken from google: 
+if [[ $choice == '3' ]]; then
+	printf "\n"
+	echo "You have selected to Enter your Weight: "
+	./dailyWeight
+fi
+
+if [[ $choice == '2' ]]; then
+	printf "\n"
+	echo "You have selected Calorie Intake: "
+	./calorieIntake
+fi
+
+if [[ $choice == '1' ]]; then
+ 	printf "\n"
+	echo "You have selected Nutrition Diary: "
+	./nutrition
+fi

@@ -1,0 +1,239 @@
+#!/bin/bash
+#establish a boolean variable
+printf "\n"
+
+printf "\tWelcome to the BumbleBee Weight Tracker Program!\n"
+printf "\tWould you like to continue? (yes/no)\n"
+read -p "------> " answer
+
+while [ $answer = "yes" ];
+do
+        ./WeightTrackerGUI
+        printf "\tWould you like to run the Weight Tracker Program again? (yes/no)\n"
+        read -p "------> " input
+        if [ $input = "no" ]; then
+                break
+        fi
+done
+        printf "\tSee you next time!\n"
+        printf "\n"
+#!/bin/bash
+
+# clear the screen
+tput clear
+
+# Move cursor to screen location X,Y (top left is 0,0)
+tput cup 3 15
+
+# Set a foreground colour using ANSI escape
+tput setaf 23
+echo "Daily Weight Tracker!"
+tput sgr0
+
+tput cup 5 17
+# Set reverse video mode
+tput rev
+echo "Please Select From the Following Options"
+tput sgr0
+
+tput cup 7 15
+echo "1. Nutrtion Diary"
+
+tput cup 8 15
+echo "2. Calorie Intake"
+
+tput cup 9 15
+echo "3. Weight Log"
+
+tput cup 10 15
+echo "4. Exit Program"
+
+# Set bold mode
+tput bold
+tput cup 12 15
+read -p "Enter your choice [1-4] " choice
+
+if [[ $choice == '3' ]]; then
+        printf "\n"
+        echo "You have selected to Enter your Weight: "
+        ./dailyWeight
+fi
+
+if [[ $choice == '2' ]]; then
+        printf "\n"
+        echo "You have selected Calorie Intake: "
+        ./calorieIntake
+fi
+
+if [[ $choice == '1' ]]; then
+        printf "\n"
+        echo "You have selected Nutrition Diary: "
+        ./nutrition
+fi
+#!/bin/bash
+
+#Set the date and weight variables
+DATE=$(date +%y-%m-%d)
+
+printf "\n"
+#Get the old weight from the user
+read -p "Enter your weight from yesterday, round to the nearest WHOLE number (in pounds): " oldWeight
+#Get the new weight from the user
+read -p "Enter your weight for today, round to the nearest WHOLE number (in pounds): " currentWeight
+printf "\n"
+
+if [[ $oldWeight < $currentWeight ]]; then
+        pounds=$(($oldWeight-$currentWeight))
+        posPounds=$(($pounds * -1))
+        printf "On this date: $DATE\n"
+        printf "You have gained $posPounds pounds.\n"
+
+elif [[ $oldWeight -gt $currentWeight ]]; then
+        pounds=$(($oldWeight-$currentWeight))
+        printf "On this date: $DATE\n"
+        printf "You have lost $pounds pounds.\n"
+
+else
+        printf "On this date: $DATE\n"
+        printf "You have not gained or lost any weight since the previous weigh in.\n"
+fi
+printf "\n"
+
+echo "$DATE,$oldWeight,$currentWeight,$pounds" >> "dailyWeight.txt"
+
+exit
+#!/bin/ksh
+DATE=$(date +%y-%m-%d)
+
+breakfastCal=0
+lunchCal=0
+dinnerCal=0
+
+echo " "
+#get the input from the user
+printf "\tPlease select the meal you would like to enter your calories for: \n"
+printf "\n"
+
+select option in breakfast lunch dinner quit
+do
+        case $option in
+                breakfast)
+                        printf "\n"
+                        printf "\t$option\n"
+                        printf "\tHow many calories did you consume? "
+                        read breakfastCal
+                        printf "\tYour Breakfast Calories ($breakfastCal) have been logged.\n"
+                        printf "\n"
+                        ;;
+                lunch)
+                        printf "\n"
+                        printf "\t$option\n"
+                        printf "\tHow many calories did you consume? "
+                        read lunchCal
+                        printf "\tYour Lunch Calories ($lunchCal) have been logged.\n"
+                        printf "\n"
+                        ;;
+                dinner)
+                        printf "\n"
+                        printf "\t$option\n"
+                        printf "\tHow many calories did you consume? "
+                        read dinnerCal
+                        printf "\tYour Dinner Calories ($dinnerCal) have been logged.\n"
+                        printf "\n"
+                        ;;
+                quit)
+                        break
+                        ;;
+                *)
+                        echo "Please select a valid input!"
+                        echo " "
+                        ;;
+        esac
+done
+
+printf "\n"
+totalCal=$(($breakfastCal+$lunchCal+$dinnerCal))
+printf "\tYour total Calories entered on this day, $DATE, is: $totalCal\n"
+
+if [[ $totalCal -gt 2000 ]]
+then
+        printf "\tYour calorie intake is above the reccomended daily average.\n"
+        printf "\tIn order to loose weight successfully, you must consume\n"
+        printf "\tless calories. :-D\n"
+elif [[ $totalCal -lt 1000 ]]
+then
+        printf "\n"
+        printf "\tYour calorie intake is below the healthy calorie amount\n"
+        printf "\treccomended for daily intake. In order to live a healthy\n"
+        printf "\tlifestyle, you must consume AT LEAST 1000 calories per day\n"
+elif [[ $totalCal -gt 1000 && $totalCal -lt 2000 ]]
+then
+        printf "\tYou are eating a healthy number of calories per day!\n"
+fi
+
+echo "$DATE,$breakfastCal,$lunchCal,$dinnerCal" >> calorieIntake.txt
+printf "\n"
+#!/bin/ksh
+printf "\n"
+
+printf "\tHow many food items would you like to enter?\n"
+read size
+
+
+DATE=$(date +%y-%m-%d)
+i=1
+
+meatcount=0
+dairycount=0
+grainscount=0
+frvegcount=0
+fatscount=0
+
+while [ $i -le $size ]
+do
+        printf "\tPlease select the type of food this item is:\n"
+
+        select food in meat dairy grains fruitsvegetables fatssugars
+        do
+                case $food in
+                        meat)
+                                let meatcount=$meatcount+1
+                                break
+                                ;;
+                        dairy)
+                                let dairycount=$dairycount+1
+                                break
+                                ;;
+                        grains)
+                                let grainscount=$grainscount+1
+                                break
+                                ;;
+                        fruitsvegetables)
+                                let frvegcount=$frvegcount+1
+                                break
+                                ;;
+                        fatssugars)
+                                let fatscount=$fatscount+1
+                                break
+                                ;;
+                        *)
+                                echo "Please select a valid input!"
+                                ;;
+                esac
+        done
+let i=i+1
+done
+
+printf "\n"
+echo "Number of Meat items: $meatcount"
+echo "Number of Dairy items: $dairycount"
+echo "Number of Grain items: $grainscount"
+echo "Number of Fruit or Vegetables: $frvegcount"
+echo "Number of Fats or Sugars: $fatscount"
+
+totalCount=$(($meatcount+$dairycount+$grainscount+$frvegcount+$fatscount))
+printf "\n"
+echo "Total number of food items eaten so far on this day, $DATE, is: $totalCount"
+
+echo "$DATE,$meatcount,$dairycount,$graincount,$frvegcount,$fatscount,$totalCount" >> nutrition.txt
+printf "\n"

@@ -1,0 +1,87 @@
+#!/bin/ksh
+DATE=$(date +%y-%m-%d)
+
+breakfastCal=0
+lunchCal=0
+dinnerCal=0
+
+echo " "
+#get the input from the user
+printf "\tPlease select the meal you would like to enter your calories for: \n"
+printf "\n"
+
+select option in breakfast lunch dinner quit
+do
+	case $option in
+		breakfast)
+			printf "\n"
+			printf "\t$option\n"
+			printf "\tHow many calories did you consume? "
+			read breakfastCal
+			printf "\tYour Breakfast Calories ($breakfastCal) have been logged.\n"	
+			printf "\n"
+			echo "1) breakfast"
+			echo "2) lunch"
+			echo "3) dinner"
+			echo "4) quit"
+			;;	
+		lunch)
+			printf "\n"
+			printf "\t$option\n"
+		 	printf "\tHow many calories did you consume? "
+                        read lunchCal
+                        printf "\tYour Lunch Calories ($lunchCal) have been logged.\n"  
+			printf "\n"
+		        echo "1) breakfast"
+                        echo "2) lunch"
+                        echo "3) dinner"
+                        echo "4) quit"
+                        ;;	
+		dinner)
+			printf "\n"
+			printf "\t$option\n"
+			printf "\tHow many calories did you consume? "
+                        read dinnerCal
+                        printf "\tYour Dinner Calories ($dinnerCal) have been logged.\n"
+                        printf "\n"
+			echo "1) breakfast"
+                        echo "2) lunch"
+                        echo "3) dinner"
+                        echo "4) quit"
+			;;
+		quit)
+			break
+			;;
+		*)
+			echo "Please select a valid input!"
+			echo " "
+			echo "1) breakfast"
+                        echo "2) lunch"
+                        echo "3) dinner"
+                        echo "4) quit"
+			;;
+	esac
+done
+
+printf "\n"
+totalCal=$(($breakfastCal+$lunchCal+$dinnerCal))
+printf "\tYour total Calories entered on this day, $DATE, is: $totalCal\n"
+
+if [[ $totalCal -gt 2000 ]]
+then
+	printf "\tYour calorie intake is above the reccomended daily average.\n"
+	printf "\tIn order to loose weight successfully, you must consume\n"
+	printf "\tless calories. :-D\n"
+elif [[ $totalCal -lt 1000 ]]
+then
+	printf "\n"
+	printf "\tYour calorie intake is below the healthy calorie amount\n"
+	printf "\treccomended for daily intake. In order to live a healthy\n"
+	printf "\tlifestyle, you must consume AT LEAST 1000 calories per day\n"
+elif [[ $totalCal -gt 1000 && $totalCal -lt 2000 ]]
+then
+	printf "\tYou are eating a healthy number of calories per day!\n"
+fi
+
+echo "$DATE,$breakfastCal,$lunchCal,$dinnerCal,$totalCal" >> calorieIntake.txt
+printf "\n"

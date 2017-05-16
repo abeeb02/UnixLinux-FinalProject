@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#Set the date and weight variables
+DATE=$(date +%y-%m-%d)
+
+printf "\n"
+#Get the old weight from the user
+read -p "Enter your weight from yesterday, round to the nearest WHOLE number (in pounds): " oldWeight
+#Get the new weight from the user
+read -p "Enter your weight for today, round to the nearest WHOLE number (in pounds): " currentWeight
+printf "\n"
+
+if [[ $oldWeight < $currentWeight ]]; then
+	pounds=$(($oldWeight-$currentWeight))
+	posPounds=$(($pounds * -1))
+	printf "On this date: $DATE\n"
+	printf "You have gained $posPounds pounds.\n"
+
+elif [[ $oldWeight -gt $currentWeight ]]; then
+	pounds=$(($oldWeight-$currentWeight))
+	printf "On this date: $DATE\n"
+	printf "You have lost $pounds pounds.\n"
+
+else
+	printf "On this date: $DATE\n"
+	printf "You have not gained or lost any weight since the previous weigh in.\n"
+fi
+printf "\n"
+
+echo "$DATE,$oldWeight,$currentWeight,$pounds" >> "dailyWeight.txt"
+
+exit
+
+

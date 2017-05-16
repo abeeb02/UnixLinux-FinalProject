@@ -1,0 +1,19 @@
+#!/bin/bash
+#establish a boolean variable
+printf "\n"
+
+printf "\tWelcome to the BumbleBee Weight Tracker Program!\n"
+printf "\tWould you like to continue? (yes/no)\n"
+read -p "------> " answer
+
+while [ $answer = "yes" ];
+do
+	./WeightTrackerGUI
+	printf "\tWould you like to run the Weight Tracker Program again? (yes/no)\n"
+	read -p "------> " input
+	if [ $input = "no" ]; then
+		break
+	fi
+done
+	printf "\tSee you next time!\n"
+	printf "\n"

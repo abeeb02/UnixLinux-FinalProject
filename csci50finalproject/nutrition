@@ -1,0 +1,65 @@
+#!/bin/ksh
+printf "\n"
+
+printf "\tHow many food items would you like to enter?\n"
+read size
+
+
+DATE=$(date +%y-%m-%d)
+i=1
+
+meatcount=0
+dairycount=0
+grainscount=0
+frvegcount=0
+fatscount=0
+
+while [ $i -le $size ]
+do
+	printf "\tPlease select the type of food this item is:\n" 
+
+	select food in meat dairy grains fruitsvegetables fatssugars
+	do
+		case $food in
+			meat)
+				let meatcount=$meatcount+1
+				break
+				;;
+			dairy)
+				let dairycount=$dairycount+1
+				break
+				;;			
+			grains)
+				let grainscount=$grainscount+1
+				break
+				;;
+			fruitsvegetables)
+				let frvegcount=$frvegcount+1
+				break
+				;;
+			fatssugars)
+				let fatscount=$fatscount+1
+				break
+				;;
+			*)
+				echo "Please select a valid input!"
+				;;
+		esac
+	done
+let i=i+1
+done
+
+printf "\n"
+echo "Number of Meat items: $meatcount"
+echo "Number of Dairy items: $dairycount"
+echo "Number of Grain items: $grainscount"
+echo "Number of Fruit or Vegetables: $frvegcount"
+echo "Number of Fats or Sugars: $fatscount"
+
+totalCount=$(($meatcount+$dairycount+$grainscount+$frvegcount+$fatscount))
+printf "\n"
+echo "Total number of food items eaten so far on this day, $DATE, is: $totalCount"
+
+echo "$DATE,$meatcount,$dairycount,$grainscount,$frvegcount,$fatscount,$totalCount" >> nutrition.txt
+printf "\n"
+
